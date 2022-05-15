@@ -8,8 +8,9 @@ void main() async {
   ));
 }
 
-Future<String> send(String pw, String sdk) async {
-  const String url = 'http://192.168.0.10:80/post';
+Future<String> send(String host, String pw, String sdk) async {
+  String url = 'http://192.168.0.' + host + ':80/post';
+  print(url);
   final response = await http.post(
     Uri.parse(url),
     headers: <String, String>{
@@ -34,6 +35,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _State extends State<MyApp> {
+  TextEditingController hostController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController sdkController = TextEditingController();
   TextEditingController debugController = TextEditingController();
@@ -49,19 +51,19 @@ class _State extends State<MyApp> {
             child: Column(
               children: <Widget>[
                 Container(
-                  height: 200,
+                  height: 100,
                   color: Color(0xffeeeeee),
                   padding: EdgeInsets.all(10.0),
                   child: new ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxHeight: 200.0,
+                      maxHeight: 100.0,
                     ),
                     child: new Scrollbar(
                       child: new SingleChildScrollView(
                         scrollDirection: Axis.vertical,
                         reverse: true,
                         child: SizedBox(
-                          height: 190.0,
+                          height: 90.0,
                           child: new TextField(
                             maxLines: 100,
                             controller: debugController,
@@ -73,6 +75,16 @@ class _State extends State<MyApp> {
                           ),
                         ),
                       ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: TextField(
+                    controller: hostController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: '192.168.0.host',
                     ),
                   ),
                 ),
@@ -101,7 +113,9 @@ class _State extends State<MyApp> {
                   child: Text('Submit'),
                   onPressed: () async {
                     String res = await send(
-                          passwordController.text, sdkController.text).whenComplete(() => null);
+                          hostController.text,
+                          passwordController.text,
+                          sdkController.text).whenComplete(() => null);
                     debugController.text = res;
                   },
                 ),
