@@ -15,6 +15,7 @@ A new Flutter project.
     # Use with the CupertinoIcons class for iOS style icons.
     cupertino_icons: ^1.0.2
     webview_flutter: ^3.0.4 # add it
+    # ... SKIPPED ...
   ```
   * Android
     * `webview/android/app/build.gradle`
