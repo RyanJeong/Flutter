@@ -11,7 +11,7 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const WebView(
-      initialUrl: 'https://www.naver.com',
+      initialUrl: 'https://www.naver.com', // http://10.0.0.1
       javascriptMode: JavascriptMode.unrestricted,
     );
   }
