@@ -1,3 +1,4 @@
 class Globals {
-  static var isSetup = false;
+  static String rasp = "";
+  static String app = "";
 }

@@ -1,15 +1,8 @@
 // Default
-import 'dart:async';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 // Webview
 import 'package:webview_flutter/webview_flutter.dart';
-
-// html and http
-import 'package:html/parser.dart';
-import 'package:http/http.dart';
 
 // MQTT
 import 'package:provider/provider.dart';
@@ -48,7 +41,6 @@ class _FirstRoute extends State<FirstRoute> {
                 height: 500,
                 child: ChangeNotifierProvider<MQTTAppState>(
                   create: (_) => MQTTAppState(),
-                  /// child: MQTTView(),
                   child: Visibility(
                     child: MQTTView(),
                     maintainSize: true,
@@ -63,16 +55,21 @@ class _FirstRoute extends State<FirstRoute> {
                 child: RaisedButton(
                   child: const Text('WiFi Setup'),
                   onPressed: () async {
-                    /// this.setState(() {
-                    ///   Globals.isSetup = !Globals.isSetup;
-                    /// });
-                    /// print(Globals.isSetup);
                     await Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const SecondRoute()),
                     );
                     setState(() {
-                      _isSetup = Globals.isSetup;
+                      print("setState()");
+                      print(Globals.rasp);
+                      print(Globals.app);
+                      if (Globals.rasp != null &&
+                          Globals.app != null) {
+                        _isSetup = true;
+                      } else {
+                        _isSetup = false;
+                      }
+                      print(_isSetup);
                     });
                   },
                 ),
@@ -84,17 +81,6 @@ class _FirstRoute extends State<FirstRoute> {
   }
 }
 
-//   child: RaisedButton(
-//     child: const Text('WiFi Setup'),
-//     onPressed: () {
-//       Navigator.push(
-//         context,
-//         MaterialPageRoute(builder: (context) => const SecondRoute()),
-//       );
-//     },
-//   ),
-// ),
-
 class SecondRoute extends StatefulWidget {
   final CookieManager? cookieManager;
   const SecondRoute({Key? key, this.cookieManager}) : super(key: key);
@@ -104,6 +90,7 @@ class SecondRoute extends StatefulWidget {
 }
 
 class _WebViewExampleState extends State<SecondRoute> {
+  late WebViewController _controller;
 
   @override
   void initState() {
@@ -120,43 +107,24 @@ class _WebViewExampleState extends State<SecondRoute> {
       body: WebView(
         initialUrl: 'http://10.0.0.1',
         javascriptMode: JavascriptMode.unrestricted,
+        onWebViewCreated: (WebViewController controller) {
+          _controller = controller;
+        },
         onPageFinished: (String url) {
-          print("onPageFinished: " + url);
-          ParseAndPop(url);
+          if (url.contains("connect")) {
+            ParseAndPop(url);
+          }
         },
       ),
     );
   }
 
   void ParseAndPop(String url) async {
-    Response response = await get(Uri.parse(url));
-    print(response.statusCode);
-    var doc = parse(response.body);
-    print(doc.body);
-    if (url.contains("connect")) {
-      print("onPageFinished, contains connect");
-      var serial1 = doc.getElementById('serial1');
-      print(serial1?.innerHtml);
-      var serial2 = doc.getElementById('serial2');
-      print(serial2?.innerHtml);
-      print(Globals.isSetup);
-      Globals.isSetup = true;
-      print(Globals.isSetup);
-      Navigator.pop(context);
-    } else {  // for test
-      var test = doc.getElementById('submit');
-      print(test?.innerHtml);  // if it prints, it works well;
-    }
-    // if (response.statusCode == 200) {
-    //   var doc = parse(response.body);
-    //   var serial1 = doc.getElementById('serial1');
-    //   print(serial1?.innerHtml);
-    //   var serial2 = doc.getElementById('serial2');
-    //   print(serial2?.innerHtml);
-    //   isActive = true;
-    //   Navigator.pop(context);
-    // } else {
-    //   print('error ${response.statusCode}');
-    // }
+    Globals.rasp = await _controller.runJavascriptReturningResult(
+        "document.getElementById('serial1').innerHTML");  // r
+    Globals.app = await _controller.runJavascriptReturningResult(
+        "document.getElementById('serial2').innerHTML");  // f
+
+    Navigator.pop(context);
   }
 }
