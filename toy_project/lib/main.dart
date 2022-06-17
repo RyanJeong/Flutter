@@ -122,29 +122,31 @@ class _WebViewExampleState extends State<SecondRoute> {
         javascriptMode: JavascriptMode.unrestricted,
         onPageFinished: (String url) {
           print("onPageFinished: " + url);
-          if (url.contains("connect")) {
-            print("onPageFinished, contains connect");
-            ParseAndPop(url);
-          }
+          ParseAndPop(url);
         },
       ),
     );
   }
 
   void ParseAndPop(String url) async {
-    print(url);
     Response response = await get(Uri.parse(url));
     print(response.statusCode);
     var doc = parse(response.body);
     print(doc.body);
-    var serial1 = doc.getElementById('serial1');
-    print(serial1?.innerHtml);
-    var serial2 = doc.getElementById('serial2');
-    print(serial2?.innerHtml);
-    print(Globals.isSetup);
-    Globals.isSetup = true;
-    print(Globals.isSetup);
-    Navigator.pop(context);
+    if (url.contains("connect")) {
+      print("onPageFinished, contains connect");
+      var serial1 = doc.getElementById('serial1');
+      print(serial1?.innerHtml);
+      var serial2 = doc.getElementById('serial2');
+      print(serial2?.innerHtml);
+      print(Globals.isSetup);
+      Globals.isSetup = true;
+      print(Globals.isSetup);
+      Navigator.pop(context);
+    } else {  // for test
+      var test = doc.getElementById('submit');
+      print(test?.innerHtml);  // if it prints, it works well;
+    }
     // if (response.statusCode == 200) {
     //   var doc = parse(response.body);
     //   var serial1 = doc.getElementById('serial1');
