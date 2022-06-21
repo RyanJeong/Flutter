@@ -105,7 +105,7 @@ class _WebViewExampleState extends State<SecondRoute> {
         title: const Text('WiFi Setup'),
       ),
       body: WebView(
-        initialUrl: 'http://10.0.0.1',
+        initialUrl: Globals.webviewUrl;
         javascriptMode: JavascriptMode.unrestricted,
         onWebViewCreated: (WebViewController controller) {
           _controller = controller;
