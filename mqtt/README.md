@@ -33,3 +33,12 @@ $ mosquitto_sub - h 192.168.0.1 -t TOKEN
 # pub
 $ mosquitto_pub - h 192.168.0.1 -t TOKEN -m "Test"
 ```
+```shell
+#!/bin/bash
+if [ $# -eq 1 ]; then
+  mosquitto_pub -h 192.168.0.1 -t A -m $1
+else
+  mosquitto_pub -h 192.168.0.1 -t A -m "Hello!"
+fi
+
+```
