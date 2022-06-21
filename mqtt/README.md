@@ -20,3 +20,16 @@ A new Flutter project.
     provider: ^6.0.3    # add it
     # ... SKIPPED ...
   ```
+
+## MQTT
+```
+$ sudo apt-cache search mosquito
+$ sudo apt-get install mosquitto
+$ sudo apt-get install mosquitto-clients
+
+# sub
+$ mosquitto_sub - h 192.168.0.1 -t /A
+
+# pub
+$ mosquitto_pub - h 192.168.0.1  -t /A -m "Test"
+```
