@@ -28,8 +28,8 @@ $ sudo apt-get install mosquitto
 $ sudo apt-get install mosquitto-clients
 
 # sub
-$ mosquitto_sub - h 192.168.0.1 -t /A
+$ mosquitto_sub - h 192.168.0.1 -t TOKEN
 
 # pub
-$ mosquitto_pub - h 192.168.0.1  -t /A -m "Test"
+$ mosquitto_pub - h 192.168.0.1  -t TOKEN -m "Test"
 ```
