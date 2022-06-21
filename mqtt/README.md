@@ -31,5 +31,5 @@ $ sudo apt-get install mosquitto-clients
 $ mosquitto_sub - h 192.168.0.1 -t TOKEN
 
 # pub
-$ mosquitto_pub - h 192.168.0.1  -t TOKEN -m "Test"
+$ mosquitto_pub - h 192.168.0.1 -t TOKEN -m "Test"
 ```
