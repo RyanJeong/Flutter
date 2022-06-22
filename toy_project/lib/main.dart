@@ -27,7 +27,9 @@ class FirstRoute extends StatefulWidget {
 }
 
 class _FirstRoute extends State<FirstRoute> {
-  bool _isSetup = false;
+  // TODO: temporary
+  // bool _isSetup = false;
+  bool _isSetup = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,7 +107,7 @@ class _WebViewExampleState extends State<SecondRoute> {
         title: const Text('WiFi Setup'),
       ),
       body: WebView(
-        initialUrl: Globals.webviewUrl;
+        initialUrl: Globals.webviewUrl,
         javascriptMode: JavascriptMode.unrestricted,
         onWebViewCreated: (WebViewController controller) {
           _controller = controller;
