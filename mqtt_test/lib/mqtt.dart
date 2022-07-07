@@ -4,10 +4,11 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
 class MQTT {
-  MqttServerClient? _client;
   final String _host;
   final String _identifier;
   final String _topic;
+
+  MqttServerClient? _client;
 
   MQTT(
       { required String host,
@@ -35,7 +36,7 @@ class MQTT {
         'willtopic') // If you set this you must set a will message
         .withWillMessage('My Will message')
         .startClean() // Non persistent session for testing
-        .withWillQos(MqttQos.atLeastOnce);
+        .withWillQos(MqttQos.exactlyOnce);
     _client!.connectionMessage = connMess;
   }
 
@@ -89,18 +90,23 @@ class MQTT {
 
   void onConnected() {
     print('MQTT::onConnected()');
-    _client!.subscribe(_topic, MqttQos.atLeastOnce);
-    _client!.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
-      // ignore: avoid_as
-      final MqttPublishMessage recMess = c![0].payload as MqttPublishMessage;
+    _client!.subscribe(_topic, MqttQos.exactlyOnce);
+    // _client!.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
+    //   // ignore: avoid_as
+    //   final MqttPublishMessage recMess = c![0].payload as MqttPublishMessage;
 
-      // final MqttPublishMessage recMess = c![0].payload;
-      final String pt =
-      MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-      print('MQTT::onConnected(): '
-          'Change notification:: topic is <${c[0].topic}>, '
-          'payload is <-- $pt -->');
-      print('');
-    });
+    //   // final MqttPublishMessage recMess = c![0].payload;
+    //   final String pt =
+    //   MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+    //   print('MQTT::onConnected(): '
+    //       'Change notification:: topic is <${c[0].topic}>, '
+    //       'payload is <-- $pt -->');
+    //   print('');
+    // });
+  }
+
+  MqttServerClient? getMQTTObject() {
+    return _client;
   }
 }
+

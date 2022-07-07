@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_test/mqtt.dart';
 
 const String host = "172.30.1.41";
@@ -15,18 +16,19 @@ Future<int> main() async {
     topic: topicSub
   );
   clientSub.initializeMQTTClient();
-  clientSub.connect();
-  foo();
 
-  return 0;
-}
-
-void foo() {
   MQTT clientPub = MQTT(
-      identifier: identifierPub,
-      host: host,
-      topic: topicPub
+    identifier: identifierPub,
+    host: host,
+    topic: topicPub
   );
   clientPub.initializeMQTTClient();
-  clientPub.publish("test1");
+
+  clientSub.connect();
+  clientSub.getMQTTObject()!.updates!.listen(
+      (List<MqttReceivedMessage<MqttMessage?>>? c) {
+    clientPub.publish("test1");
+  });
+
+  return 0;
 }
